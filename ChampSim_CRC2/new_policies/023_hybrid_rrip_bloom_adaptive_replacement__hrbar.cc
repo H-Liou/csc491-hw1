@@ -1,0 +1,154 @@
+#include <vector>
+#include <cstdint>
+#include <iostream>
+#include <cstring>
+#include "../inc/champsim_crc2.h"
+
+#define NUM_CORE 1
+#define LLC_SETS (NUM_CORE * 2048)
+#define LLC_WAYS 16
+
+// RRIP constants
+#define RRIP_BITS 2
+#define RRIP_MAX ((1 << RRIP_BITS) - 1)
+#define RRIP_LONG 3   // Insert with 3 for streaming/irregular
+#define RRIP_SHORT 0  // Insert with 0 for high locality
+
+// Bloom filter parameters
+#define BLOOM_BITS 32      // 32 bits per set
+#define BLOOM_HASHES 2     // Number of hash functions
+#define BLOOM_RESET_EPOCH 4096 // Reset Bloom filter every N accesses
+
+struct BlockMeta {
+    uint8_t valid;
+    uint8_t rrip;
+    uint64_t tag;
+};
+
+struct SetState {
+    std::vector<BlockMeta> meta;
+    uint32_t bloom; // 32-bit Bloom filter
+    uint32_t access_count; // For periodic reset
+};
+
+std::vector<SetState> sets(LLC_SETS);
+
+// Simple Bloom filter hash functions (using PC and tag)
+inline uint32_t bloom_hash1(uint64_t pc, uint64_t tag) {
+    return ((pc ^ tag) * 0x9e3779b9) & (BLOOM_BITS - 1);
+}
+inline uint32_t bloom_hash2(uint64_t pc, uint64_t tag) {
+    return (((pc >> 3) + tag * 13) * 0x7f4a7c15) & (BLOOM_BITS - 1);
+}
+
+// --- Initialize replacement state ---
+void InitReplacementState() {
+    for (auto& set : sets) {
+        set.meta.assign(LLC_WAYS, {0, RRIP_MAX, 0});
+        set.bloom = 0;
+        set.access_count = 0;
+    }
+}
+
+// --- Find victim in the set ---
+uint32_t GetVictimInSet(
+    uint32_t cpu,
+    uint32_t set,
+    const BLOCK *current_set,
+    uint64_t PC,
+    uint64_t paddr,
+    uint32_t type
+) {
+    SetState& s = sets[set];
+    // Prefer invalid
+    for (uint32_t way = 0; way < LLC_WAYS; way++) {
+        if (!current_set[way].valid)
+            return way;
+    }
+    // RRIP victim selection: pick block(s) with RRIP_MAX
+    for (uint32_t round = 0; round < 2; round++) {
+        for (uint32_t way = 0; way < LLC_WAYS; way++) {
+            if (s.meta[way].rrip == RRIP_MAX)
+                return way;
+        }
+        // Aging: increment all RRIP values
+        for (uint32_t way = 0; way < LLC_WAYS; way++) {
+            if (s.meta[way].rrip < RRIP_MAX)
+                s.meta[way].rrip++;
+        }
+    }
+    // Fallback: evict LRU (highest RRIP)
+    uint32_t victim = 0;
+    uint8_t max_rrip = 0;
+    for (uint32_t way = 0; way < LLC_WAYS; way++) {
+        if (s.meta[way].rrip >= max_rrip) {
+            max_rrip = s.meta[way].rrip;
+            victim = way;
+        }
+    }
+    return victim;
+}
+
+// --- Bloom filter logic ---
+void bloom_insert(SetState& s, uint64_t pc, uint64_t tag) {
+    uint32_t h1 = bloom_hash1(pc, tag);
+    uint32_t h2 = bloom_hash2(pc, tag);
+    s.bloom |= (1u << h1);
+    s.bloom |= (1u << h2);
+}
+
+bool bloom_query(const SetState& s, uint64_t pc, uint64_t tag) {
+    uint32_t h1 = bloom_hash1(pc, tag);
+    uint32_t h2 = bloom_hash2(pc, tag);
+    return ((s.bloom & (1u << h1)) && (s.bloom & (1u << h2)));
+}
+
+// --- Update replacement state ---
+void UpdateReplacementState(
+    uint32_t cpu,
+    uint32_t set,
+    uint32_t way,
+    uint64_t paddr,
+    uint64_t PC,
+    uint64_t victim_addr,
+    uint32_t type,
+    uint8_t hit
+) {
+    SetState& s = sets[set];
+    uint64_t tag = paddr >> 6;
+
+    // Periodically reset Bloom filter to avoid stale signals
+    s.access_count++;
+    if (s.access_count % BLOOM_RESET_EPOCH == 0) {
+        s.bloom = 0;
+    }
+
+    // On hit: promote block (set RRIP to 0), and insert into Bloom filter
+    if (hit) {
+        s.meta[way].rrip = 0;
+        bloom_insert(s, PC, tag);
+    } else {
+        // On miss/insertion: check Bloom filter for locality
+        if (bloom_query(s, PC, tag)) {
+            // High locality: retain longer
+            s.meta[way].rrip = RRIP_SHORT;
+        } else {
+            // Streaming/irregular: evict quickly
+            s.meta[way].rrip = RRIP_LONG;
+        }
+        // Insert into Bloom filter to track future reuse
+        bloom_insert(s, PC, tag);
+    }
+    s.meta[way].valid = 1;
+    s.meta[way].tag = tag;
+}
+
+// --- Stats ---
+uint64_t total_hits = 0, total_misses = 0, total_evictions = 0;
+void PrintStats() {
+    std::cout << "HRBAR: Hits=" << total_hits << " Misses=" << total_misses
+              << " Evictions=" << total_evictions << std::endl;
+}
+void PrintStats_Heartbeat() {
+    PrintStats();
+}
