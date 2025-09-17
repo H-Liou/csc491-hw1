@@ -1,0 +1,4 @@
+policy_label,mean_ipc,mean_cache_hit_rate
+LIME,0.314064,0.433283
+LRU,0.303145,0.416873
+Ours,0.309879,0.490244

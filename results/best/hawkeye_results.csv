@@ -1,0 +1,6 @@
+workload,policy,cpp_file_path,ipc,cache_hit_rate
+astar,hawkeye_final,ChampSim_CRC2/champ_repl_pol/hawkeye_final.cc,0.112219,0.3573547794394494
+lbm,hawkeye_final,ChampSim_CRC2/champ_repl_pol/hawkeye_final.cc,0.596838,0.27289983516244354
+mcf,hawkeye_final,ChampSim_CRC2/champ_repl_pol/hawkeye_final.cc,0.0812631,0.5087725688923012
+milc,hawkeye_final,ChampSim_CRC2/champ_repl_pol/hawkeye_final.cc,0.37839,0.06456693483565899
+omnetpp,hawkeye_final,ChampSim_CRC2/champ_repl_pol/hawkeye_final.cc,0.457304,0.6753672808393627

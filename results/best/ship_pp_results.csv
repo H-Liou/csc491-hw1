@@ -1,0 +1,6 @@
+workload,policy,cpp_file_path,ipc,cache_hit_rate
+astar,ship++,ChampSim_CRC2/champ_repl_pol/ship++.cc,0.111255,0.33821173935846005
+lbm,ship++,ChampSim_CRC2/champ_repl_pol/ship++.cc,0.591046,0.2615846099982021
+mcf,ship++,ChampSim_CRC2/champ_repl_pol/ship++.cc,0.0826903,0.524743749964974
+milc,ship++,ChampSim_CRC2/champ_repl_pol/ship++.cc,0.373146,0.054986712238499026
+omnetpp,ship++,ChampSim_CRC2/champ_repl_pol/ship++.cc,0.461175,0.698462878241108

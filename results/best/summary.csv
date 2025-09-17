@@ -1,0 +1,6 @@
+policy_label,mean_ipc,mean_cache_hit_rate
+best,0.309879,0.490244
+hawkeye,0.325203,0.375792
+lime,0.314064,0.433283
+lru,0.303145,0.416873
+ship_pp,0.323862,0.375598

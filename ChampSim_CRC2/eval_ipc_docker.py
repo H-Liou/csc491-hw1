@@ -12,6 +12,19 @@ LIB_PATH = "ChampSim_CRC2/lib/config1.a"
 INCLUDE_DIR = "ChampSim_CRC2/inc"
 DOCKER_IMAGE = "champsim-runner"
 
+# Host ↔ container path translation. The workspace root is mounted at /app.
+_HOST_ROOT = Path(os.getcwd()).resolve()
+_CONTAINER_ROOT = Path("/app")
+
+
+def _to_container_path(path: Path) -> str:
+    """Map a host path into the container's /app mount if possible."""
+    try:
+        relative = path.resolve().relative_to(_HOST_ROOT)
+    except ValueError:
+        return str(path)
+    return str(_CONTAINER_ROOT / relative)
+
 WARMUP_INST_DEFAULT = "1000000"
 SIM_INST_DEFAULT    = "10000000"
 
@@ -42,11 +55,13 @@ def compile_policy(cc: Path) -> Path:
     linking against the ChampSim static library (config1.a).
     """
     exe = cc.with_suffix(".out")
+    cc_in_container = _to_container_path(cc)
+    exe_in_container = _to_container_path(exe)
     compile_cmd = [
         "g++", "-Wall", "--std=c++11",
         "-I", INCLUDE_DIR,
-        str(cc), LIB_PATH,
-        "-o", str(exe),
+        cc_in_container, LIB_PATH,
+        "-o", exe_in_container,
     ]
     try:
         print(f"🔨 Compiling {cc} → {exe.name}")
@@ -63,11 +78,13 @@ def compile_policy(cc: Path) -> Path:
         raise
 
 def run_executable(exe: Path, trace_path: Path, warmup: str, sim: str) -> str:
+    trace_in_container = _to_container_path(trace_path)
+    exe_in_container = _to_container_path(exe)
     run_cmd = [
-        str(exe),
+        exe_in_container,
         "-warmup_instructions", warmup,
         "-simulation_instructions", sim,
-        "-traces", str(trace_path),
+        "-traces", trace_in_container,
     ]
     start = time.time()
     print(f"⏳ Running {exe.name} on {trace_path} ...")
@@ -98,6 +115,10 @@ def parse_ipc(output: str) -> float:
         m = re.search(pat, output, flags=re.IGNORECASE)
         if m:
             return float(m.group(1))
+    # Heartbeats and summaries sometimes include "cumulative" or "cummulative" IPC.
+    cum_matches = re.findall(r"c[u]?mmulative\s+IPC:\s*([0-9]*\.?[0-9]+)", output, flags=re.IGNORECASE)
+    if cum_matches:
+        return float(cum_matches[-1])
     # Fallback: compute from totals if present
     m_instr = re.search(r"Total\s+Instructions:\s*([0-9]+)", output, flags=re.IGNORECASE)
     m_cycles = re.search(r"Total\s+Cycles:\s*([0-9]+)", output, flags=re.IGNORECASE)

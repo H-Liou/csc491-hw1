@@ -1,0 +1,6 @@
+workload,policy,cpp_file_path,ipc,cache_hit_rate
+astar,lru,ChampSim_CRC2/champ_repl_pol/lru.cc,0.103988,0.45454223305787467
+lbm,lru,ChampSim_CRC2/champ_repl_pol/lru.cc,0.538881,0.43985783443540666
+mcf,lru,ChampSim_CRC2/champ_repl_pol/lru.cc,0.0701995,0.4074020886631043
+milc,lru,ChampSim_CRC2/champ_repl_pol/lru.cc,0.364294,0.3219114100958022
+omnetpp,lru,ChampSim_CRC2/champ_repl_pol/lru.cc,0.438361,0.4606533811310401
