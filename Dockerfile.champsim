@@ -1,0 +1,28 @@
+FROM ubuntu:20.04
+
+# Prevent interactive prompts during package installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    g++ \
+    make \
+    python3 \
+    python3-pip \
+    sqlite3 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy the entire project
+COPY . .
+
+# Make sure the library files are accessible
+RUN chmod 644 ChampSim_CRC2/lib/*.a
+
+# Create output directory
+RUN mkdir -p ChampSim_CRC2/new_policies
+
+# Default command
+CMD ["/bin/bash"]
