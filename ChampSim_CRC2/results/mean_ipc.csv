@@ -1,0 +1,4 @@
+policy,mean_ipc
+LRU,0.3031447
+LIME,0.31406418
+Ours,0.309879

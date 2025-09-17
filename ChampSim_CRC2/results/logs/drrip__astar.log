@@ -1,0 +1,99 @@
+
+*** ChampSim Multicore Out-of-Order Simulator ***
+
+Warmup Instructions: 1000000
+Simulation Instructions: 10000000
+Configuration: 1
+Number of CPUs: 1
+LLC sets: 2048
+LLC ways: 16
+Off-chip DRAM Channels: 1 Width: 64-bit Data Rate: 1600 MT/s
+
+CPU 0 runs traces/astar_313B.trace.gz
+Heartbeat CPU 0 instructions: 1000001 cycles: 678652 heartbeat IPC: 1.47351 cumulative IPC: 1.47351 (Simulation time: 0 hr 0 min 2 sec) 
+Protected blocks (heartbeat): 8356/32768
+Distant blocks (heartbeat): 20959/32768
+Dead blocks (heartbeat): 0/32768
+Streaming sets (heartbeat): 0/2048
+PSEL (heartbeat): 489/1023
+
+Warmup complete CPU 0 instructions: 1000001 cycles: 678652 (Simulation time: 0 hr 0 min 2 sec) 
+
+Heartbeat CPU 0 instructions: 2000003 cycles: 11108373 heartbeat IPC: 0.09588 cumulative IPC: 0.09588 (Simulation time: 0 hr 0 min 6 sec) 
+Protected blocks (heartbeat): 6540/32768
+Distant blocks (heartbeat): 7606/32768
+Dead blocks (heartbeat): 0/32768
+Streaming sets (heartbeat): 0/2048
+PSEL (heartbeat): 1023/1023
+Heartbeat CPU 0 instructions: 3000003 cycles: 18723431 heartbeat IPC: 0.131319 cumulative IPC: 0.110835 (Simulation time: 0 hr 0 min 9 sec) 
+Protected blocks (heartbeat): 4760/32768
+Distant blocks (heartbeat): 8467/32768
+Dead blocks (heartbeat): 0/32768
+Streaming sets (heartbeat): 0/2048
+PSEL (heartbeat): 1002/1023
+Heartbeat CPU 0 instructions: 4000000 cycles: 26651509 heartbeat IPC: 0.126134 cumulative IPC: 0.115505 (Simulation time: 0 hr 0 min 12 sec) 
+Protected blocks (heartbeat): 4800/32768
+Distant blocks (heartbeat): 7805/32768
+Dead blocks (heartbeat): 0/32768
+Streaming sets (heartbeat): 0/2048
+PSEL (heartbeat): 956/1023
+Heartbeat CPU 0 instructions: 5000002 cycles: 34707486 heartbeat IPC: 0.124132 cumulative IPC: 0.117547 (Simulation time: 0 hr 0 min 15 sec) 
+Protected blocks (heartbeat): 4455/32768
+Distant blocks (heartbeat): 8120/32768
+Dead blocks (heartbeat): 0/32768
+Streaming sets (heartbeat): 0/2048
+PSEL (heartbeat): 982/1023
+Heartbeat CPU 0 instructions: 6000001 cycles: 45299947 heartbeat IPC: 0.0944067 cumulative IPC: 0.112054 (Simulation time: 0 hr 0 min 20 sec) 
+Protected blocks (heartbeat): 5728/32768
+Distant blocks (heartbeat): 7357/32768
+Dead blocks (heartbeat): 0/32768
+Streaming sets (heartbeat): 0/2048
+PSEL (heartbeat): 1021/1023
+Heartbeat CPU 0 instructions: 7000000 cycles: 56898577 heartbeat IPC: 0.086217 cumulative IPC: 0.106724 (Simulation time: 0 hr 0 min 24 sec) 
+Protected blocks (heartbeat): 7895/32768
+Distant blocks (heartbeat): 6895/32768
+Dead blocks (heartbeat): 0/32768
+Streaming sets (heartbeat): 0/2048
+PSEL (heartbeat): 990/1023
+Heartbeat CPU 0 instructions: 8000000 cycles: 69277497 heartbeat IPC: 0.0807825 cumulative IPC: 0.102043 (Simulation time: 0 hr 0 min 29 sec) 
+Protected blocks (heartbeat): 6945/32768
+Distant blocks (heartbeat): 7520/32768
+Dead blocks (heartbeat): 0/32768
+Streaming sets (heartbeat): 0/2048
+PSEL (heartbeat): 953/1023
+Heartbeat CPU 0 instructions: 9000001 cycles: 80534686 heartbeat IPC: 0.0888322 cumulative IPC: 0.10018 (Simulation time: 0 hr 0 min 33 sec) 
+Protected blocks (heartbeat): 6380/32768
+Distant blocks (heartbeat): 7237/32768
+Dead blocks (heartbeat): 0/32768
+Streaming sets (heartbeat): 0/2048
+PSEL (heartbeat): 1018/1023
+Heartbeat CPU 0 instructions: 10000002 cycles: 88215078 heartbeat IPC: 0.130202 cumulative IPC: 0.102814 (Simulation time: 0 hr 0 min 36 sec) 
+Protected blocks (heartbeat): 4548/32768
+Distant blocks (heartbeat): 8547/32768
+Dead blocks (heartbeat): 0/32768
+Streaming sets (heartbeat): 0/2048
+PSEL (heartbeat): 1013/1023
+Heartbeat CPU 0 instructions: 11000000 cycles: 96016957 heartbeat IPC: 0.128174 cumulative IPC: 0.10489 (Simulation time: 0 hr 0 min 39 sec) 
+Protected blocks (heartbeat): 4497/32768
+Distant blocks (heartbeat): 8185/32768
+Dead blocks (heartbeat): 0/32768
+Streaming sets (heartbeat): 0/2048
+PSEL (heartbeat): 972/1023
+Finished CPU 0 instructions: 10000003 cycles: 95338307 cummulative IPC: 0.10489 (Simulation time: 0 hr 0 min 39 sec) 
+
+ChampSim completed all CPUs
+
+Region of Interest Statistics
+
+CPU 0 cummulative IPC: 0.10489 instructions: 10000003 cycles: 95338307
+LLC TOTAL     ACCESS:    1128784  HIT:     483630  MISS:     645154
+LLC LOAD      ACCESS:     241903  HIT:      13110  MISS:     228793
+LLC RFO       ACCESS:     402462  HIT:      31249  MISS:     371213
+LLC PREFETCH  ACCESS:          0  HIT:          0  MISS:          0
+LLC WRITEBACK ACCESS:     484419  HIT:     439271  MISS:      45148
+DRRIP + Streaming Bypass + Dead-Block Bit Policy
+Protected blocks: 4497/32768
+Distant blocks: 8185/32768
+Dead blocks: 0/32768
+Streaming sets: 0/2048
+PSEL: 972/1023

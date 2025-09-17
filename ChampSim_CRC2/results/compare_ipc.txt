@@ -1,0 +1,21 @@
+--- Best policy ---
+astar,0.10489
+lbm,0.535222
+mcf,0.074309
+milc,0.366431
+omnetpp,0.468543
+mean,0.309879
+--- LIME baseline ---
+astar,0.110739
+lbm,0.555505
+mcf,0.0820529
+milc,0.368337
+omnetpp,0.453687
+mean,0.314064
+--- LRU baseline ---
+astar,0.103988
+lbm,0.538881
+mcf,0.0701995
+milc,0.364294
+omnetpp,0.438361
+mean,0.303145

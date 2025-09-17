@@ -1,0 +1,16 @@
+workload,policy,ipc
+astar,YourBest,0.10489
+lbm,YourBest,0.535222
+mcf,YourBest,0.074309
+milc,YourBest,0.366431
+omnetpp,YourBest,0.468543
+astar,LIME,0.110739
+lbm,LIME,0.555505
+mcf,LIME,0.0820529
+milc,LIME,0.368337
+omnetpp,LIME,0.453687
+astar,LRU,0.103988
+lbm,LRU,0.538881
+mcf,LRU,0.0701995
+milc,LRU,0.364294
+omnetpp,LRU,0.438361
